@@ -1,4 +1,4 @@
 FROM node:20-alpine
-WORKDOR /app
+WORKDIR /app
 COPY . .
 CMD ["node", "index.js"]
