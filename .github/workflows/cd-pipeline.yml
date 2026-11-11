@@ -1,0 +1,30 @@
+name: Production CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Secure Deploy to Production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Inject Secret from GitHub to Kubernetes
+        run: |
+          echo "Getting a secret from GitHub Secrets to cluster..."
+          echo "kubectl create secret generic db-credentials --from-literal=password=${{ secrets.PROD_DB_PASSWORD }} --dry-run=client -o yaml | kubectl apply -f -"
+
+      - name: Deploy Application
+        run: |
+          echo "Rolling out app that uses db-credentials..."
+          echo "kubectl apply -f k8s/deployment.yaml"
+          echo "Deploy completedgit add ."

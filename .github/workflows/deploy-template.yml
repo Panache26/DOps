@@ -16,22 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup kubectl
-        uses: azure/setup-kubectl@v3
-        with:
-          version: 'latest'
-
-      - name: Deploy to Kubernetes & Inject Secrets
+      - name: Deploy
         run: |
-          echo "ver ${{ inputs.image-tag }} to ${{ inputs.environment }}..."
-          
-          # Імітація інтеграції секрету (замість платного AWS Secrets Manager)
-          echo "Secret from GitHub Secrets to cluster"
-          echo "kubectl create secret generic app-token --from-literal=token=${{ secrets.DEPLOY_TOKEN }} --dry-run=client -o yaml | kubectl apply -f -"
-          
-          # Імітація деплою
-          echo "kubectl apply -f k8s/deployment.yaml"
-          echo "Deploy done"
+          echo "Deploying ${{ inputs.image-tag }} to ${{ inputs.environment }}"
