@@ -1,0 +1,40 @@
+---
+- name: Розгортання застосунку в Amazon EKS
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Створити простір імен для проєкту
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: fraud-detection-ns
+
+    - name: Розгорнути Deployment застосунку
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: fraud-detection-app
+            namespace: fraud-detection-ns
+          spec:
+            replicas: 2
+            selector:
+              matchLabels:
+                app: fraud-detection
+            template:
+              metadata:
+                labels:
+                  app: fraud-detection
+              spec:
+                containers:
+                  - name: app-container
+                    image: nginx:1.25
+                    ports:
+                      - containerPort: 80

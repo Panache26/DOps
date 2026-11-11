@@ -1,2 +1,12 @@
 .vs/
 node_modules/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+.terraform.tfstate.lock.info
+
+# local workspace
+.env

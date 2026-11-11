@@ -15,7 +15,6 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  # Stage 1: Build and Test
   test:
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +35,6 @@ jobs:
       - name: Run linting
         run: npm run lint
 
-  # Stage 2: Build Docker Image
   build:
     needs: test
     runs-on: ubuntu-latest
@@ -77,7 +75,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # Stage 3: Deploy to Staging
   deploy-staging:
     needs: build
     runs-on: ubuntu-latest
@@ -88,7 +85,6 @@ jobs:
           echo "Deploying to staging..."
           echo "Image tag: ${{ needs.build.outputs.image-tag }}"
 
-  # Stage 4: Deploy to Production
   deploy-production:
     needs: [build, deploy-staging]
     runs-on: ubuntu-latest
