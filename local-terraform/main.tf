@@ -7,20 +7,17 @@ terraform {
   }
 }
 
-# Підключаємо Terraform до вашого локального Docker Desktop Kubernetes
 provider "kubernetes" {
   config_path    = "~/.kube/config"
   config_context = "docker-desktop"
 }
 
-# 1. Автоматично створюємо ізольований простір імен для проєкту
 resource "kubernetes_namespace" "finance_env" {
   metadata {
     name = "finance-local-env"
   }
 }
 
-# 2. Описуємо інфраструктуру застосунку (Deployment) через код
 resource "kubernetes_deployment" "finance_app" {
   metadata {
     name      = "finance-backend"
@@ -57,7 +54,6 @@ resource "kubernetes_deployment" "finance_app" {
   }
 }
 
-# 3. Виводимо результат
 output "namespace_created" {
   description = "Створений простір імен"
   value       = kubernetes_namespace.finance_env.metadata[0].name
